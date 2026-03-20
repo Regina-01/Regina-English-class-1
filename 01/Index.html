@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>중등임용 교육학 기출문제 인터랙티브 학습</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-indigo-600 text-white p-6 shadow-md">
+    <div class="max-w-5xl mx-auto flex justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <i data-lucide="book-open" class="w-8 h-8 shrink-0"></i>
+        <h1 class="text-xl md:text-2xl font-bold">중등임용 교육학 기출문제 인터랙티브 학습</h1>
+      </div>
+      <a href="../index.html" class="flex items-center gap-1.5 bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded-lg transition-colors font-medium shrink-0 shadow-sm">
+        <i data-lucide="home" class="w-4 h-4"></i>
+        홈
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto p-4 md:p-6 grid grid-cols-1 md:grid-cols-4 gap-6">
+    <!-- Sidebar Navigation -->
+    <div id="sidebar" class="md:col-span-1 flex flex-col gap-2"></div>
+    
+    <!-- Content Area -->
+    <div id="main-content" class="md:col-span-3 flex flex-col gap-6"></div>
+  </main>
+
+  <script>
+    // 기출문제 및 학습 데이터 구성
+    const studyData = [
+      {
+        id: '2014',
+        year: '2014학년도',
+        theme: '수업 소극성 진단 및 동기 유발',
+        scenario: `[박 교사와 최 교사의 대화]
+박 교사: 선생님, 수업 시간에 반응이 없고 목석처럼 앉아 있는 학생들, 심지어 저와 눈도 마주치지 않으려는 학생들 때문에 고민입니다. 게다가 가정 환경이 좋지 않아 문화적 경험이 부족한 학생들은 수업 참여도가 특히 낮아요.
+최 교사: 방치해선 안 되죠. 동기 유발 방안이 필요합니다.
+박 교사: 학생들끼리 서로 도와가며 학습하는 협동학습은 어떨까요?
+최 교사: 좋지만, 서로 도와주고 '의존하도록 하는 구조'가 필수적입니다.
+박 교사: 그렇군요. 그리고 평가결과를 학기 중에 점수로만 알려주니 성적이 낮은 학생들은 실망만 하는 것 같아요. 또, 교사의 지도성에 따라 학생 참여도 달라지는 것 같고요.`,
+        concepts: [
+          { name: '잠재적 교육과정', desc: '학교의 물리적 조건, 제도, 교사의 태도 등을 통해 학생들이 은연중에 배우게 되는 경험의 총체 (학생들이 수업 중 침묵, 회피를 학습함)' },
+          { name: '문화실조', desc: '가정 환경 등으로 인해 인지적, 정서적 발달에 필요한 문화적 경험을 충분히 하지 못한 상태' },
+          { name: '형성평가', desc: '학습 과정 중에 학생의 이해도를 점검하고 피드백을 제공하여 학습을 촉진하는 평가' },
+          { name: '협동학습 (긍정적 상호의존성)', desc: '집단의 목표 달성을 위해 자신뿐만 아니라 동료의 성취도 중요함을 인식하게 하는 구조' }
+        ],
+        quiz: {
+          question: "위 대화에서 '가정 환경이 좋지 않아 다양한 문화적 경험을 가질 기회가 부족하여 수업 참여가 낮은 현상'을 설명하는 교육사회학적 개념은 무엇입니까?",
+          options: ["문화지체", "문화실조", "상징적 상호작용", "낙인효과"],
+          answer: 1, // 0-indexed
+          explanation: "정답은 '문화실조'입니다. 가정의 사회경제적 배경으로 인해 지적 발달이나 학교 학습에 필요한 문화적 경험이 결핍된 상태를 의미합니다."
+        }
+      },
+      {
+        id: '2016',
+        year: '2016학년도',
+        theme: '교사의 역량 및 자기개발',
+        scenario: `[김 교사의 자기개발계획서 중 일부]
+- 수업 구성: 학생의 경험을 중시하는 교육과정 실행, 학생의 흥미/요구에 기반한 활동 증진, 일방적 개념 전달 지양
+- 평가 계획: 진단평가 이후 교수학습이 진행되는 '중간'에 평가 실시
+- 진로 지도: 선배들의 진로 체험담, 롤모델의 성공/실패 사례 제공을 통한 간접 경험
+- 학교 내 조직: 활기찬 학교생활을 위해 공식 조직 외에도 관심이 같은 동료 교사들과의 자발적 모임 활동 참여`,
+        concepts: [
+          { name: '경험중심 교육과정', desc: '학습자의 흥미와 요구를 바탕으로 학교의 지도하에 학생들이 가지는 모든 경험을 교육과정으로 보는 입장' },
+          { name: '형성평가', desc: '교수학습 진행 중간에 학생의 학습 진행 상황을 파악하고 피드백을 주기 위해 실시하는 평가' },
+          { name: '사회인지학습이론 (대리경험)', desc: '반두라(Bandura)의 이론으로, 타인(롤모델 등)의 행동과 그 결과를 관찰함으로써 학습이 일어나는 현상' },
+          { name: '비공식 조직', desc: '공식 조직 내에서 구성원들의 개인적 관심이나 친밀감에 의해 자발적으로 형성된 조직' }
+        ],
+        quiz: {
+          question: "김 교사가 교수·학습이 진행되는 '중간'에 실시하고자 하는 평가의 유형은 무엇입니까?",
+          options: ["진단평가", "총괄평가", "형성평가", "배치평가"],
+          answer: 2,
+          explanation: "정답은 '형성평가'입니다. 수업 도중에 학습자의 이해 정도를 파악하고 교수-학습 방법을 개선하기 위해 실시하는 평가입니다."
+        }
+      },
+      {
+        id: '2019',
+        year: '2019학년도',
+        theme: '수업 개선을 위한 교사의 반성적 실천',
+        scenario: `[김 교사의 반성적 성찰 메모]
+#1 평소 언어/수리 능력만 우수하다고 생각했는데, 모둠활동을 보니 '다른 학생을 이해하고 도와주며 상호작용'을 잘하는 학생(A,B)을 발견했어. 반면 C학생은 자신의 감정과 장단점을 잘 이해하는 편이군.
+#2 모둠 구성 시 태도 등 정의적 요소도 반영하기 위해 평정척도법을 사용한 설문을 만들어야겠어.
+#3 새로운 지도성이 필요해. 내 윤리적·도덕적 기준을 높이고, 학생들의 혁신적 사고에 자극제가 되며, 개별적 배려와 비전을 제시해야지.`,
+        concepts: [
+          { name: '다중지능이론 (대인관계지능/개인내적지능)', desc: '가드너의 이론. 타인을 이해하는 능력(대인관계)과 자신을 객관적으로 이해하는 능력(개인내적)' },
+          { name: '평정척도법', desc: '관찰된 행동이나 특성을 일정한 기준에 따라 등급으로 평가하는 방법. 관대화, 집중경향의 오류에 주의해야 함.' },
+          { name: '변혁적 지도성', desc: '바스(Bass)의 지도성. 카리스마(이상적 완전성), 영감적 동기유발, 지적 자극, 개별적 배려를 통해 구성원의 변화를 이끎.' }
+        ],
+        quiz: {
+          question: "가드너(Gardner)의 다중지능이론에 따르면, 메모 #1에서 A와 B학생이 보여준 '다른 학생을 이해하고 상호작용을 잘하는 능력'에 해당하는 지능은 무엇입니까?",
+          options: ["개인내적 지능", "대인관계 지능", "실존적 지능", "논리수학 지능"],
+          answer: 1,
+          explanation: "정답은 '대인관계 지능(Interpersonal Intelligence)'입니다. 타인의 기분, 의도, 동기 등을 지각하고 적절하게 반응하는 능력입니다."
+        }
+      },
+      {
+        id: '2023',
+        year: '2023학년도',
+        theme: '교육 공동체 의견 반영 학교 교육 개선',
+        scenario: `[학교 운영 자체 평가 보고서]
+- 학생 만족도 분석: 수업 내용 수준 변화가 없었음에도 만족도가 높아진 것은 학생들에게 '숙달 경험'과 '대리 경험'을 제공하여 [자기효능감]을 높이고 [자기조절]을 촉진한 결과임. 수업 중 퀴즈/질문 등 형성평가를 부담 없이 적용한 것도 효과적이었음.
+- 학부모 의견 반영: 듀이의 경험중심 교육과정으로 만족도를 높였으나, 학문적 지식(브루너)을 원한다는 의견을 반영하여 지식 구조 중심의 체계적 보완이 필요함.
+- 조직 운영: 베버의 관료제 특징 중 '규칙과 규정'이 잘 적용되어 기본에 충실한 학교 문화가 형성됨.`,
+        concepts: [
+          { name: '자기효능감 (Self-Efficacy)', desc: '특정 과제를 성공적으로 수행할 수 있다는 자신의 능력에 대한 믿음' },
+          { name: '학문중심 교육과정', desc: '브루너 제창. 각 학문에 내재된 지식의 구조를 발견학습을 통해 가르치고자 하는 교육과정' },
+          { name: '관료제의 규칙과 규정', desc: '순기능으로 업무의 통일성과 안정성을 보장하지만, 역기능으로 목표 전도 현상(Red Tape)을 초래할 수 있음' },
+          { name: '내용타당도', desc: '평가 문항이 수업 중에 가르친 교육과정의 목표와 내용을 얼마나 충실히 측정하고 있는가의 정도' }
+        ],
+        quiz: {
+          question: "관료제의 특징 중 '규칙과 규정'을 지나치게 강조할 경우 발생할 수 있는 역기능(문제점)으로 가장 적절한 것은 무엇입니까?",
+          options: ["조직의 안정성 저하", "구성원의 권위주의 심화", "목표 전도 현상 (규칙 만능주의)", "의사결정의 신속성 증가"],
+          answer: 2,
+          explanation: "정답은 '목표 전도 현상'입니다. 수단에 불과한 규칙이나 절차가 본래의 조직 목표보다 더 중요하게 여겨지는 현상을 말합니다."
+        }
+      },
+      {
+        id: '2024',
+        year: '2024학년도',
+        theme: '학습자 맞춤형 교육 지원',
+        scenario: `[교육 전문가 대담]
+교사 A: 신체활동 장려를 위해 만든 동아리에서 학생들끼리 너무 친해져 '자기들끼리만 어울리는 파벌'이 생겼습니다. 이는 의도치 않은 결과네요.
+전문가 C: 온라인 수업은 대면보다 상호작용이 어렵습니다. 학습자와 콘텐츠, 학습자와 교사, 학습자와 학습자 간 상호작용을 모두 고려해야 합니다.
+전문가 E: 능력 수준을 고려한 평가로 '능력참조평가'와 검사 방법으로 '컴퓨터 능력적응검사(CAT)'를 추천합니다. 학생의 능력 수준에 따라 문항 난이도가 조절됩니다.
+전문가 G: 맞춤형 교육과정 운영 시 법적 기구인 '학교운영위원회(교원, 학부모, 지역위원)'의 심의/자문을 거쳐야 합니다.`,
+        concepts: [
+          { name: '잠재적 교육과정', desc: '학교의 의도나 계획과는 무관하게 학생들이 학교생활을 하는 동안 은연중에 가지게 되는 경험 (파벌 형성 등)' },
+          { name: '능력참조평가', desc: '학생이 지니고 있는 능력에 비추어 얼마나 최선을 다했느냐(능력 발휘 정도)를 평가하는 방식' },
+          { name: '컴퓨터 능력적응검사 (CAT)', desc: '수험자의 응답 결과에 따라 다음 문항의 난이도가 동적으로 결정되어 측정의 오차를 줄이는 맞춤형 검사' },
+          { name: '학교운영위원회', desc: '학교 운영의 자율성을 높이고 지역 실정에 맞는 교육을 위해 학부모, 교원, 지역인사로 구성된 법정 기구' }
+        ],
+        quiz: {
+          question: "학교에서 의도적으로 계획하지 않았으나 학교생활을 하는 동안 학생들이 은연중에 겪게 되는 경험(예: 파벌 형성)을 의미하는 교육과정은 무엇입니까?",
+          options: ["영 교육과정", "잠재적 교육과정", "표면적 교육과정", "학문중심 교육과정"],
+          answer: 1,
+          explanation: "정답은 '잠재적 교육과정(Latent Curriculum)'입니다. 잭슨(Jackson)이 명명한 개념으로, 공식적 의도와 상관없이 학교생활 속에서 학습되는 가치나 태도를 뜻합니다."
+        }
+      }
+    ];
+
+    // 전역 상태 변수
+    let activeTab = 0;
+    let selectedOption = null;
+    let isSubmitted = false;
+
+    // DOM 요소 가져오기
+    const sidebarEl = document.getElementById('sidebar');
+    const mainContentEl = document.getElementById('main-content');
+
+    // 이벤트 핸들러
+    window.handleTabClick = (index) => {
+      activeTab = index;
+      resetQuizState();
+      render();
+    };
+
+    window.handleOptionClick = (index) => {
+      if (!isSubmitted) {
+        selectedOption = index;
+        render();
+      }
+    };
+
+    window.handleQuizSubmit = () => {
+      if (selectedOption !== null) {
+        isSubmitted = true;
+        render();
+      }
+    };
+
+    window.resetQuiz = () => {
+      resetQuizState();
+      render();
+    };
+
+    window.nextLesson = () => {
+      if (activeTab < studyData.length - 1) {
+        activeTab++;
+        resetQuizState();
+        render();
+      }
+    };
+
+    const resetQuizState = () => {
+      selectedOption = null;
+      isSubmitted = false;
+    };
+
+    // 렌더링 함수
+    const renderSidebar = () => {
+      let html = `<h2 class="font-semibold text-slate-500 uppercase tracking-wider text-sm mb-2">학습 연도 선택</h2>`;
+      
+      studyData.forEach((data, index) => {
+        const isActive = activeTab === index;
+        const buttonClass = isActive 
+          ? 'bg-white border-indigo-600 shadow-sm text-indigo-700 font-medium' 
+          : 'hover:bg-slate-200 border-transparent text-slate-600';
+
+        html += `
+          <button
+            onclick="handleTabClick(${index})"
+            class="text-left p-3 rounded-lg transition-colors border-l-4 ${buttonClass}"
+          >
+            <div class="text-lg">${data.year}</div>
+            <div class="text-xs truncate text-slate-500 mt-1">${data.theme}</div>
+          </button>
+        `;
+      });
+
+      sidebarEl.innerHTML = html;
+    };
+
+    const renderMainContent = () => {
+      const currentLesson = studyData[activeTab];
+
+      // 핵심 개념 HTML 생성
+      const conceptsHtml = currentLesson.concepts.map(concept => `
+        <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 p-3 bg-indigo-50/50 rounded-lg">
+          <span class="font-bold text-indigo-700 min-w-[120px]">${concept.name}</span>
+          <span class="text-slate-600 text-sm">${concept.desc}</span>
+        </div>
+      `).join('');
+
+      // 퀴즈 옵션 HTML 생성
+      const optionsHtml = currentLesson.quiz.options.map((option, idx) => {
+        let btnClass = 'bg-white border-slate-200 hover:bg-slate-50';
+        let iconHtml = '';
+
+        if (isSubmitted) {
+          if (idx === currentLesson.quiz.answer) {
+            btnClass = 'bg-green-100 border-green-500 text-green-800 font-semibold';
+            iconHtml = `<i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>`;
+          } else if (idx === selectedOption) {
+            btnClass = 'bg-red-100 border-red-500 text-red-800';
+          } else {
+            btnClass = 'bg-slate-50 border-slate-200 opacity-60';
+          }
+        } else if (idx === selectedOption) {
+          btnClass = 'bg-indigo-100 border-indigo-500 text-indigo-800';
+        }
+
+        return `
+          <button
+            onclick="handleOptionClick(${idx})"
+            ${isSubmitted ? 'disabled' : ''}
+            class="p-3 text-left rounded-lg border transition-all ${btnClass}"
+          >
+            <div class="flex justify-between items-center">
+              <span>${idx + 1}. ${option}</span>
+              ${iconHtml}
+            </div>
+          </button>
+        `;
+      }).join('');
+
+      // 버튼 및 피드백 영역 HTML 생성
+      let actionHtml = '';
+      if (!isSubmitted) {
+        const btnClass = selectedOption !== null 
+          ? 'bg-indigo-600 text-white hover:bg-indigo-700' 
+          : 'bg-slate-200 text-slate-400 cursor-not-allowed';
+          
+        actionHtml = `
+          <button
+            onclick="handleQuizSubmit()"
+            ${selectedOption === null ? 'disabled' : ''}
+            class="w-full sm:w-auto px-6 py-2 rounded-lg font-bold transition-colors ${btnClass}"
+          >
+            정답 확인하기
+          </button>
+        `;
+      } else {
+        const isCorrect = selectedOption === currentLesson.quiz.answer;
+        const feedbackBoxClass = isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
+        const feedbackMessage = isCorrect ? '🎉 정답입니다!' : '😢 오답입니다.';
+
+        let nextBtnHtml = '';
+        if (activeTab < studyData.length - 1) {
+          nextBtnHtml = `
+            <button 
+              onclick="nextLesson()"
+              class="flex items-center gap-1 bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition-colors whitespace-nowrap"
+            >
+              다음 기출 풀기 <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+          `;
+        }
+
+        actionHtml = `
+          <div class="w-full p-4 rounded-lg flex-1 border ${feedbackBoxClass}">
+            <p class="font-bold mb-1">${feedbackMessage}</p>
+            <p class="text-sm text-slate-700">${currentLesson.quiz.explanation}</p>
+          </div>
+          <div class="flex gap-2 w-full sm:w-auto mt-4 sm:mt-0 flex-shrink-0">
+            <button onclick="resetQuiz()" class="p-2 text-slate-500 hover:bg-slate-100 rounded-lg tooltip" title="다시 풀기">
+               <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+            </button>
+            ${nextBtnHtml}
+          </div>
+        `;
+      }
+
+      mainContentEl.innerHTML = `
+        <!-- Header Area -->
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-slate-100">
+          <h2 class="text-2xl font-bold text-slate-800 mb-2">
+            ${currentLesson.year} 기출: ${currentLesson.theme}
+          </h2>
+          <div class="h-1 w-20 bg-indigo-500 rounded mb-6"></div>
+          
+          <h3 class="text-lg font-semibold flex items-center gap-2 mb-3">
+            <i data-lucide="alert-circle" class="w-5 h-5 text-indigo-500"></i>
+            기출 시나리오 요약
+          </h3>
+          <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 text-slate-700 whitespace-pre-wrap leading-relaxed">${currentLesson.scenario}</div>
+        </div>
+
+        <!-- Concepts Area -->
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-slate-100">
+          <h3 class="text-lg font-semibold flex items-center gap-2 mb-4">
+            <i data-lucide="award" class="w-5 h-5 text-indigo-500"></i>
+            핵심 교육학 개념 정리
+          </h3>
+          <div class="grid gap-3">
+            ${conceptsHtml}
+          </div>
+        </div>
+
+        <!-- Quiz Area -->
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-slate-100 border-t-4 border-t-indigo-500">
+          <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+            📝 확인 퀴즈
+          </h3>
+          <p class="text-slate-700 mb-4 font-medium">${currentLesson.quiz.question}</p>
+          
+          <div class="flex flex-col gap-2 mb-6">
+            ${optionsHtml}
+          </div>
+
+          <!-- Actions & Feedback -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4">
+            ${actionHtml}
+          </div>
+        </div>
+      `;
+    };
+
+    const render = () => {
+      renderSidebar();
+      renderMainContent();
+      
+      // DOM을 새로 그렸으므로 Lucide 아이콘 다시 초기화
+      lucide.createIcons();
+    };
+
+    // 초기 렌더링 실행
+    render();
+  </script>
+</body>
+</html>
